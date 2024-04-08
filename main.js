@@ -1,5 +1,8 @@
 
 /*created by prashant shukla */
+rigth_wrist_x = "";
+rigth_wrist_y = "";
+rigth_wrist_score = "";
 
 var paddle2 =10,paddle1=10;
 
@@ -22,12 +25,27 @@ var ball = {
 }
 
 function setup(){
+  game_status = "";
   var canvas =  createCanvas(700,600);
+
+  poseNet = poseNet.on('pose', gotPoses)
 }
 
+function gotPoses(results){
+  if(results.length > 0){
+		console.log(results);
+		rigth_wrist_x = results[0].pose.rigth_wrist.x;
+		rigth_wrist_y = results[0].pose.rigth_wrist.y;
+	}
+}
 
 function draw(){
-
+  if(game_status == "start"){
+  if(rigth_wrist_score > 0.2){
+    fill()
+    stroke()
+    circle(50, 50);
+  }
  background(0); 
 
  fill("black");
@@ -65,6 +83,7 @@ function draw(){
    
    //function move call which in very important
     move();
+}
 }
 
 
@@ -162,4 +181,9 @@ function paddleInCanvas(){
   if(mouseY < 0){
     mouseY =0;
   }  
+}
+
+function startGame(){
+  game_status = "start";
+  document.getElementById("status").innerHTML = "Game is loaded";
 }
